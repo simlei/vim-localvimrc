@@ -183,7 +183,6 @@ endif
 function! s:LocalVimRC()
   " begin marker
   call s:LocalVimRCDebug(1, "== START LocalVimRC() ============================")
-  echom 'locavimrc ' . &buftype . ' ' . &filetype
 
   " print version
   call s:LocalVimRCDebug(1, "localvimrc.vim " . g:loaded_localvimrc)
@@ -222,7 +221,6 @@ function! s:LocalVimRC()
   endif
 
   let l:directory = fnameescape(expand("%:p:h"))
-  echom "localvimrc l:dir = " . l:directory
 
   if empty(l:directory)
     let l:directory = fnameescape(getcwd())
