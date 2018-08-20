@@ -198,13 +198,14 @@ function! s:LocalVimRC()
   " only consider normal buffers (skip especially CommandT's GoToFile buffer)
   " NOTE: in general the buftype is not set for new buffers (BufWinEnter),
   "       e.g. for help files via plugins (pydoc)
-  let l:specialcase=''
+  let l:specialcase='none'
   if &filetype == 'dirvish' 
       let l:specialcase='dirvish'
   elseif &buftype == 'terminal'
       let l:specialcase='terminal'
   endif
-  if ! empty(&buftype) && l:specialcase == ''
+  " echom 'lvimrc ' . l:specialcase
+  if ! empty(&buftype) && l:specialcase == 'none'
     call s:LocalVimRCDebug(1, "not a normal buffer, exiting")
     return
   endif
