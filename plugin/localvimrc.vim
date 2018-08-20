@@ -183,6 +183,7 @@ endif
 function! s:LocalVimRC()
   " begin marker
   call s:LocalVimRCDebug(1, "== START LocalVimRC() ============================")
+  echom 'locavimrc ' . &buftype . ' ' . &filetype
 
   " print version
   call s:LocalVimRCDebug(1, "localvimrc.vim " . g:loaded_localvimrc)
@@ -198,13 +199,31 @@ function! s:LocalVimRC()
   " only consider normal buffers (skip especially CommandT's GoToFile buffer)
   " NOTE: in general the buftype is not set for new buffers (BufWinEnter),
   "       e.g. for help files via plugins (pydoc)
-  if !empty(&buftype)
+  let l:specialcase=''
+  if &filetype == 'dirvish' 
+      let l:specialcase='dirvish'
+  elseif &buftype == 'terminal'
+      let l:specialcase='terminal'
+  endif
+  if ! empty(&buftype) && l:specialcase == ''
     call s:LocalVimRCDebug(1, "not a normal buffer, exiting")
     return
   endif
 
   " directory of current file (correctly escaped)
+  if l:specialcase == 'terminal'
+      if exists('t:cwd')
+          let l:directory = t:cwd.'/'
+      else
+          let l:directory = getcwd().'/'
+      endif
+      " dirvish already got its buffer named like this. really good stuff,
+      " that plugin
+  endif
+
   let l:directory = fnameescape(expand("%:p:h"))
+  echom "localvimrc l:dir = " . l:directory
+
   if empty(l:directory)
     let l:directory = fnameescape(getcwd())
   endif
